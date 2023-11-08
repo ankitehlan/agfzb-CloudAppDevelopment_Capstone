@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+<style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 80%;
+      margin-left: 32px;
+      margin-right: 32px;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    </style>
+    </head>
+<h1 style="margin-left: 32px;">
+    Contact Us
+</h1>
+<h3 style="font-style: italic; margin-left: 32px; margin-right: 32px;">
+    Details about CAPSTONE
+</h3>
+<table>
+    <tr>
+        <th>Attribute</th>
+        <th>Details</th>
+    </tr>
+    <tr>
+        <td>Name</td>
+        <td>CAPSTONE</td>
+    </tr>
+    <tr>
+        <td>Address</td>
+        <td>15338 NE 9th Pl, Bellevue, WA, 98007</td>
+    </tr>
+    <tr>
+        <td>Contact</td>
+        <td>+1 432 768 9876</td>
+    </tr>
+</table>
+{% load static %}
+<img style="display: block; margin-left: auto; margin-right: auto; width: 40%;" src="{% static 'admin/img/icon-clock.svg'%}"></img>
+{% endblock content %}
