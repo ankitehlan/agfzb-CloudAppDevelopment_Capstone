@@ -35,11 +35,11 @@
             <a class="btn btn-link" href="#"
               >{{ user.first_name }}({{ user.username }})</a
             >
-            <a class="btn btn-link" href="">Logout</a>
+            <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
           </li>
           {% else %}
           <li>
-            <form class="form-inline" action="" method="post">
+            <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
               {% csrf_token %}
               <div class="input-group">
                 <input
@@ -55,7 +55,7 @@
                   name="psw"
                 />
                 <button class="btn btn-primary" type="submit">Login</button>
-                <a class="btn btn-link" href="">Sign Up</a>
+                <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
               </div>
             </form>
           </li>
