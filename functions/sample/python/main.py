@@ -3,10 +3,9 @@
 Returns:
     List: List of reviews for the given dealership
 """
-from cloudant.client import Cloudant
-from cloudant.error import CloudantException
+from cloudant import Cloudant
+from flask_apiexceptions import ApiException
 import requests
-
 
 def main(param_dict):
     """Main Function
@@ -20,12 +19,12 @@ def main(param_dict):
 
     try:
         client = Cloudant.iam(
-            account_name=param_dict["COUCH_USERNAME"],
-            api_key=param_dict["IAM_API_KEY"],
+            account_name="e5c1f382-d6e3-4c53-b67f-a2e45ce95497-bluemix",
+            api_key="u8v-rk2sni64qWz9lvYJLcbSw6NqgS27ijwCR4oVHhXu",
             connect=True,
         )
         print(f"Databases: {client.all_dbs()}")
-    except CloudantException as cloudant_exception:
+    except ApiException as cloudant_exception:
         print("unable to connect")
         return {"error": cloudant_exception}
     except (requests.exceptions.RequestException, ConnectionResetError) as err:
