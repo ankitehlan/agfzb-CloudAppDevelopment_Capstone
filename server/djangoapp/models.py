@@ -11,7 +11,7 @@ from django.utils.timezone import now
 # - __str__ method to print a car make object
 
 class CarMake(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(default=1, primary_key=True)
     name = models.CharField(null=False, max_length=20)
     description = models.CharField(null=False, max_length=50)
 
@@ -29,7 +29,7 @@ class CarMake(models.Model):
 # - __str__ method to print a car make object
 
 class CarModel(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(default=1, primary_key=True)
     make = models.ForeignKey(CarMake, null=False, on_delete=models.CASCADE)
     name = models.CharField(null=False, max_length=20)
     dealer_id = models.CharField(null=False, max_length=20)
@@ -43,8 +43,8 @@ class CarModel(models.Model):
         (WAGON, 'Wagon')
     ]
     
-    type = models.CharField(null=False, choices=CAR_TYPES, max_length=20)
-    year = models.DateField(null=False)
+    type = models.CharField(null=False, choices=CAR_TYPES, max_length=20, default=SEDAN)
+    year = models.DateField(null=False, default=now)
 
     def __str__(self):
         return self.name + " (" + self.type + ")"
