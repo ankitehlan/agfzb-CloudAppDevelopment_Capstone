@@ -3,5 +3,9 @@
 
 {% block content %}
 <!--Add a dealer table here -->
-<div>Dealer table</div>
+{% for i in dealerships %}
+	<div class="row">
+		{{ i }}
+	</div>
+{% endfor %}
 {% endblock content %}
