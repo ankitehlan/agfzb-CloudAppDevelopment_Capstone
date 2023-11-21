@@ -175,16 +175,10 @@ def get_dealer_reviews_from_cf(url, **kwargs):
 def analyze_review_sentiments(text):
     url = "https://api.eu-gb.natural-language-understanding.watson.cloud.ibm.com/instances/9f4f74d0-c3af-4933-9d5a-b88a97d0de1e"
     api_key = "jZtEBcSkOeJopHdWLBLMV-yf7-BiFvHJyAKLCmPciSYk"
-    authenticator = IAMAuthenticator(api_key)
-    natural_language_understanding = NaturalLanguageUnderstandingV1(version='2022-08-01',authenticator=authenticator)
-    try:
-        response = natural_language_understanding.analyze(
-            text=text,
-            features=Features(sentiment=SentimentOptions(targets=[text]))
-        ).get_result()
-        label = response['sentiment']['document']['label']
-    except Exception as e:
-        print("Exception occurred during sentiment analysis:", str(e))
-        label = "unknown"
-    
+    authenticator = IAMAuthenticator(api_key) 
+    natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator) 
+    natural_language_understanding.set_service_url(url) 
+    response = natural_language_understanding.analyze(text=text,features=Features(sentiment=SentimentOptions(targets=[text])),language="en").get_result()
+    label=json.dumps(response, indent=2) 
+    label = response['sentiment']['document']['label']
     return label
