@@ -118,37 +118,44 @@ def get_dealer_details(request, id):
 # ...
 
 def add_review(request, id):
-    if request.user.is_authenticated:
-        context = {}
-        dealer_url = "https://ankitehlanwo-3000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
-        dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
-        context["dealer"] = dealer
-        if request.method == "GET":
-            cars = CarModel.objects.all()
-            context["cars"] = cars
-            print(context)
-            return render(request, 'djangoapp/add_review.html', context)
-        
-        if request.method == "POST":
-            review = {}
-            review["name"] = request.user.first_name + " " + request.user.last_name
-            form = request.POST
-            review["dealership"] = id
-            review["review"] = form["content"]
-            if(form.get("purchasecheck") == "on"):
-                review["purchase"] = True
-            else:
-                review["purchase"] = False
-            if(review["purchase"]):
-                review["purchase_date"] = form["purchasedate"]
-                car = CarModel.objects.get(pk=form["car"])
-                review["car_make"] = car.make.name
-                review["car_model"] = car.name
-                review["car_year"] = car.year
-            post_url = "https://ankitehlanwo-5000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
-            json_payload = { "review": review }
-            post_request(post_url, json_payload, id=id)
-            return redirect("djangoapp:dealer_details", id=id)
-    else:
-        return redirect("/djangoapp/login")
+    context = {}
+    dealer_url = "https://ankitehlanwo-3000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
+    dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
+    context['dealer'] = dealer
+
+    if request.method == 'GET':
+        cars = CarModel.objects.all()
+        print("CARS: ", cars)
+        context['cars'] = cars
+
+        return render(request, 'djangoapp/add_review.html', context)
+
+    elif request.method == 'POST':
+        if request.user.is_authenticated:
+            username = request.user.username
+            print(request.POST)
+            car_id = request.POST["car"]
+            car = CarModel.objects.get(pk=car_id)
+            print("CAR: ",car)
+            user_review = {}
+            user_review["time"] = datetime.utcnow().isoformat()
+            user_review["name"] = username
+            user_review["dealership"] = id
+            user_review["id"] = id
+            user_review['review'] = request.POST['content']
+            user_review['purchase'] = False
+
+            if 'purchasecheck' in request.POST:
+                if request.POST['purchasecheck'] == 'on':
+                    user_review['purchase'] = True
+                    user_review['purchase_date'] = request.POST['purchasedate']
+                    user_review['car_make'] = car.make.name
+                    user_review['car_model'] = car.name
+                    user_review['car_year'] = int(car.year.strftime("%Y"))
+            
+            payload = {}
+            payload['review'] = user_review
+            review_post_url = "https://ankitehlanwo-5000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
+            post_request(review_post_url, payload, id=id)
+        return redirect('djangoapp:dealer_details', id=id)
 

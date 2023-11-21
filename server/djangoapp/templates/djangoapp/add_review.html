@@ -31,16 +31,11 @@
 
         <div class="form-group">
             <label for="purchasedate"><b>Select Your Purchase Date:</b></label>
-            <input class="date-own form-control" type="date" name="purchasedate" id="purchasedate">
+            <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate">
         </div>
         <button class="btn btn-primary" type="submit">Submit</button>
         
     </div>
 </form>
 </body>
-<script type="text/javascript">
-    $('.date-own').datepicker({
-    format: 'mm/dd/yyyy'
-    });
-</script>
 {% endblock content %}
